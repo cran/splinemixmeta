@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>splinemixmeta</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">splinemixmeta</h1>
+
+
+
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>Package <code>splinemixmeta</code> provides some basic capabilities
+in non-parametric meta-regression. If one has responses <code>y</code>,
+each with a standard error, from previous analyses, and wants to regress
+those against study-level explanatory variables <code>x</code> without
+assuming linearity, <code>splinemixmeta</code> allows an arbitrary
+smooth relationship to be estimated as a smoothing spline. It is also
+possible to include other explanatory variables (assumed to have a
+linear relationship to <code>y</code>) and random effects groupings.
+Such an approach may be referred to as “non-parametric meta-analysis”,
+“spline meta-regression”, “meta-splines”, or other similar terminology
+mash-ups.</p>
+<p><code>splinemixmeta</code> works by bringing together features of
+<code>mgcv</code> for building spline components and
+<code>mixmeta</code> for estimating general mixed-effects meta-analysis
+models. Specifically, the splines of <code>mgcv</code> can be used as
+random effects components, with the penalty matrix providing a
+correlation structure for spline coefficients, the unknown smoothness
+parameter replaced by an unknown variance parameter, and any unpenalized
+directions in the spline parameter space (e.g. spline parameters
+representing a linear relationship) moved into fixed effects. The
+resulting pieces are then set up as needed for a call to
+<code>mixmeta::mixmeta</code> for estimating the model. Variance
+parameters are always estimated by REML (restricted maximum
+likelihood).</p>
+<p>There are some important limits on what will work. At the moment, the
+only recommended spline basis functions are <code>bs=&quot;cr&quot;</code>,
+<code>bs=&quot;cs&quot;</code>, and <code>bs=&quot;cc&quot;</code>. These are supported
+because the associated covariance matrices can be diagonalized. The
+<code>mgcv</code> default of <code>bs=&quot;tp&quot;</code> does not currently
+produce good results. One can have multiple spline components, although
+this is rather limited because most of the choices in <code>mgcv</code>
+for bivariate splines are not among those supported. It is possible that
+<code>bs = &quot;mrf&quot;</code> also works, but it has not been tested. See
+<code>help(splinemixmeta)</code> for more about what is supported.</p>
+<p>The estimation machinery is not particularly efficient and so may be
+notably slow for large models.</p>
+</div>
+<div id="example" class="section level1">
+<h1>Example</h1>
+<p>Here we give a simulated example. Say we have <code>n=50</code>
+values, with 5 values from each of 10 groups, with a sinusoidal
+relationship between <code>y</code> and <code>x</code> to provide a
+simple nonlinear example. The groups will be treated as random effects,
+as will the spline. The simplest case would not have groups, but here we
+illustrate a case that does.</p>
+<div id="data-simulation" class="section level2">
+<h2>Data simulation</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">50</span></span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>num_groups <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>group <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span>num_groups, <span class="at">each =</span> <span class="dv">5</span>) <span class="sc">|&gt;</span> <span class="fu">factor</span>()</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>group_effects <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="fu">length</span>(group), <span class="dv">0</span>, <span class="fl">0.3</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">runif</span>(n, <span class="dv">0</span>, <span class="dv">20</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>coef_x <span class="ot">&lt;-</span> <span class="fl">0.6</span></span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>se <span class="ot">&lt;-</span> <span class="fu">runif</span>(n, <span class="fl">0.1</span>, <span class="fl">0.3</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a>fx <span class="ot">&lt;-</span> <span class="fl">1.5</span> <span class="sc">*</span> <span class="fu">sin</span>(<span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">*</span> x <span class="sc">/</span> <span class="dv">12</span>)</span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">10</span> <span class="sc">+</span> coef_x <span class="sc">*</span> x <span class="sc">+</span> fx <span class="sc">+</span> </span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a>  group_effects[group] <span class="sc">+</span></span>
+<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a>  fx <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="dv">0</span>, <span class="dv">1</span>) <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="dv">0</span>, se)</span>
+<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(y, x, se, group)</span>
+<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a><span class="fu">plot</span>(y <span class="sc">~</span> x, <span class="at">data =</span> data, <span class="at">col =</span> group, <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">main =</span> <span class="st">&quot;Simulated data (color = group)&quot;</span>)</span></code></pre></div>
+<p><img role="img" src="data:image/png;base64,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" /><!-- --></p>
+<p>This data simulation has the following pieces:</p>
+<ul>
+<li>We have 10 groups of 5 data points each. (Since the <code>x</code>
+values are all drawn independently, the groups are independent from
+<code>x</code>.)</li>
+<li><code>x</code> is uniformly distributed from 0 to 20.</li>
+<li>We assume each <code>y</code> was obtained separately from a
+previous study, and these studies are grouped in some relevant way
+(e.g. from the same study region or same lab).</li>
+<li>Fixed effects for <code>y</code> include an intercept and linear
+term.</li>
+<li>Random effects for <code>y</code> include the group effects.</li>
+<li>The sinusoidal term for <code>y</code> will be estimated as a
+spline, treated as a random effect.</li>
+<li>Residuals are normally distributed with <code>sd = 1</code>.</li>
+<li>Measurement errors (i.e. estimation error from the previous studies
+from which <code>y</code> were obtained) are normally distributed with
+standard deviations that are the standard errors (<code>se</code>) from
+the previous studies. These standard errors are simulated as uniformly
+distributed between 0.1 and 0.3 to reflect heterogeneity in the
+precision of the previous studies.</li>
+</ul>
+</div>
+<div id="estimation-of-a-spline-meta-regression-model" class="section level2">
+<h2>Estimation of a spline meta-regression model</h2>
+<p>The spline meta-regression model can be estimated like this:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">library</span>(splinemixmeta)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>smm <span class="ot">&lt;-</span> <span class="fu">splinemixmeta</span>( mgcv<span class="sc">::</span><span class="fu">s</span>(x, <span class="at">bs =</span> <span class="st">&quot;cr&quot;</span>), y <span class="sc">~</span> x, </span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>                      <span class="at">se =</span> se, <span class="at">manual_fixed =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>                      <span class="at">data =</span> data, <span class="at">random =</span> <span class="sc">~</span> <span class="dv">1</span> <span class="sc">|</span> group)</span></code></pre></div>
+<p>The object <code>smm</code> will have class “splinemixmeta” and
+“mixmeta”. First we can look at a summary of the model:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">summary</span>(smm)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co">#&gt; Call:  mixmeta::mixmeta(formula = y ~ x, S = (se)^2, data = data, random = list(</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#&gt;     ~basisFxns_A - 1 | all, ~1 | group, ~1 | ID), bscov = c(&quot;id&quot;, </span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co">#&gt; &quot;unstr&quot;, &quot;unstr&quot;))</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="co">#&gt; Univariate extended random-effects meta-regression</span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co">#&gt; Dimension: 1</span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="co">#&gt; Estimation method: REML</span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="co">#&gt; Fixed-effects coefficients</span></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="co">#&gt;              Estimate  Std. Error        z  Pr(&gt;|z|)  95%ci.lb  95%ci.ub     </span></span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a><span class="co">#&gt; (Intercept)   11.6246      0.3215  36.1600    0.0000   10.9945   12.2547  ***</span></span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a><span class="co">#&gt; x              0.4509      0.0265  17.0192    0.0000    0.3990    0.5028  ***</span></span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a><span class="co">#&gt; ---</span></span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a><span class="co">#&gt; Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1 </span></span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a><span class="co">#&gt; Random-effects (co)variance components</span></span>
+<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a><span class="co">#&gt;  Formula: ~basisFxns_A - 1 | all</span></span>
+<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a><span class="co">#&gt;  Structure: Multiple of identity</span></span>
+<span id="cb3-20"><a href="#cb3-20" tabindex="-1"></a><span class="co">#&gt;               Std. Dev          Corr                                          </span></span>
+<span id="cb3-21"><a href="#cb3-21" tabindex="-1"></a><span class="co">#&gt; basisFxns_A1    0.4490  basisFxns_A1  basisFxns_A2  basisFxns_A3  basisFxns_A4</span></span>
+<span id="cb3-22"><a href="#cb3-22" tabindex="-1"></a><span class="co">#&gt; basisFxns_A2    0.4490             0                                          </span></span>
+<span id="cb3-23"><a href="#cb3-23" tabindex="-1"></a><span class="co">#&gt; basisFxns_A3    0.4490             0             0                            </span></span>
+<span id="cb3-24"><a href="#cb3-24" tabindex="-1"></a><span class="co">#&gt; basisFxns_A4    0.4490             0             0             0              </span></span>
+<span id="cb3-25"><a href="#cb3-25" tabindex="-1"></a><span class="co">#&gt; basisFxns_A5    0.4490             0             0             0             0</span></span>
+<span id="cb3-26"><a href="#cb3-26" tabindex="-1"></a><span class="co">#&gt; basisFxns_A6    0.4490             0             0             0             0</span></span>
+<span id="cb3-27"><a href="#cb3-27" tabindex="-1"></a><span class="co">#&gt; basisFxns_A7    0.4490             0             0             0             0</span></span>
+<span id="cb3-28"><a href="#cb3-28" tabindex="-1"></a><span class="co">#&gt; basisFxns_A8    0.4490             0             0             0             0</span></span>
+<span id="cb3-29"><a href="#cb3-29" tabindex="-1"></a><span class="co">#&gt;                                                       </span></span>
+<span id="cb3-30"><a href="#cb3-30" tabindex="-1"></a><span class="co">#&gt; basisFxns_A1  basisFxns_A5  basisFxns_A6  basisFxns_A7</span></span>
+<span id="cb3-31"><a href="#cb3-31" tabindex="-1"></a><span class="co">#&gt; basisFxns_A2                                          </span></span>
+<span id="cb3-32"><a href="#cb3-32" tabindex="-1"></a><span class="co">#&gt; basisFxns_A3                                          </span></span>
+<span id="cb3-33"><a href="#cb3-33" tabindex="-1"></a><span class="co">#&gt; basisFxns_A4                                          </span></span>
+<span id="cb3-34"><a href="#cb3-34" tabindex="-1"></a><span class="co">#&gt; basisFxns_A5                                          </span></span>
+<span id="cb3-35"><a href="#cb3-35" tabindex="-1"></a><span class="co">#&gt; basisFxns_A6             0                            </span></span>
+<span id="cb3-36"><a href="#cb3-36" tabindex="-1"></a><span class="co">#&gt; basisFxns_A7             0             0              </span></span>
+<span id="cb3-37"><a href="#cb3-37" tabindex="-1"></a><span class="co">#&gt; basisFxns_A8             0             0             0</span></span>
+<span id="cb3-38"><a href="#cb3-38" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-39"><a href="#cb3-39" tabindex="-1"></a><span class="co">#&gt;  Formula: ~1 | group</span></span>
+<span id="cb3-40"><a href="#cb3-40" tabindex="-1"></a><span class="co">#&gt;  Structure: General positive-definite</span></span>
+<span id="cb3-41"><a href="#cb3-41" tabindex="-1"></a><span class="co">#&gt;   Std. Dev</span></span>
+<span id="cb3-42"><a href="#cb3-42" tabindex="-1"></a><span class="co">#&gt;     0.4097</span></span>
+<span id="cb3-43"><a href="#cb3-43" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-44"><a href="#cb3-44" tabindex="-1"></a><span class="co">#&gt;  Formula: ~1 | ID</span></span>
+<span id="cb3-45"><a href="#cb3-45" tabindex="-1"></a><span class="co">#&gt;  Structure: General positive-definite</span></span>
+<span id="cb3-46"><a href="#cb3-46" tabindex="-1"></a><span class="co">#&gt;   Std. Dev</span></span>
+<span id="cb3-47"><a href="#cb3-47" tabindex="-1"></a><span class="co">#&gt;     0.8835</span></span>
+<span id="cb3-48"><a href="#cb3-48" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-49"><a href="#cb3-49" tabindex="-1"></a><span class="co">#&gt; Univariate Cochran Q-test for residual heterogeneity:</span></span>
+<span id="cb3-50"><a href="#cb3-50" tabindex="-1"></a><span class="co">#&gt; Q = 6358.8466 (df = 48), p-value = 0.0000</span></span>
+<span id="cb3-51"><a href="#cb3-51" tabindex="-1"></a><span class="co">#&gt; I-square statistic = 99.2%</span></span>
+<span id="cb3-52"><a href="#cb3-52" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-53"><a href="#cb3-53" tabindex="-1"></a><span class="co">#&gt; 50 units, 1 outcome, 50 observations, 2 fixed and 3 random-effects parameters</span></span>
+<span id="cb3-54"><a href="#cb3-54" tabindex="-1"></a><span class="co">#&gt;   logLik       AIC       BIC  </span></span>
+<span id="cb3-55"><a href="#cb3-55" tabindex="-1"></a><span class="co">#&gt; -76.3152  162.6304  171.9864</span></span></code></pre></div>
+<p>The spline terms are labeled as <code>basisFxns_A</code>. Further
+splines would be <code>basixFxns_B</code>, etc.</p>
+<p>Two factors have been introduced. One is called <code>all</code>,
+which has a single level for every row of the data, which facilitates
+use of <code>mixmeta::mixmeta</code>. The other is called
+<code>ID</code>, which has a unique value for each row. In
+meta-regression, it can be tempting to think that the standard errors
+associated with <code>y</code> values serve as the only source of
+residual variation, but that is not typically the case. If each
+<code>y</code> came from a large sample size in the previous studies,
+the standard errors would be small, but we would still expect
+study-level variation around any regression line because the world is
+noisy. That study-level variation, i.e. additional residual variation,
+is set up as a random effect with one level for each <code>y</code>.</p>
+<p>By using <code>y ~ x</code>, we included a linear term for
+<code>x</code> directly (manually), and thus we needed to set
+<code>manual_fixed = TRUE</code>. Otherwise <code>splinemixmeta</code>
+would have obtained a linear term from the spline setup and included it
+in the model, and we don’t want it duplicated. (Such a linear term, or
+more generally unpenalized dimensions of the spline coefficients, will
+always be removed from the smooth term when it is converted into the
+format of a random effect.) In the <code>summary</code> output, we see
+the full covariance matrix from the spline random effect, which is the
+vector of spline coefficients. This is shown as the standard deviation
+for each component (all the same) and their correlations (all 0),
+reflecting a covariance matrix that is a constant times an identity
+matrix. It has this structure because the random effects structure from
+the spline basis functions and penalty matrix are rotated in order to
+work with a diagonal covariance matrix.</p>
+<p>Finally we see the estimated standard deviation between groups and
+the estimated residual standard deviation, shown as the
+<code>~1 | ID</code> term.</p>
+<p>(If the default names <code>all</code> or <code>ID</code> are already
+used in the data set, <code>splinemixmeta</code> will choose different
+names.)</p>
+</div>
+<div id="predictions" class="section level2">
+<h2>Predictions</h2>
+<p>Predictions can be obtained at multiple levels of the random effects.
+The <code>predict</code> function for <code>splinemixmeta</code> objects
+simplifies this by allowing the choices of including any spline terms
+(default <code>TRUE</code>), other random effects (default
+<code>FALSE</code> but possibly of interest) and residuals (default
+<code>FALSE</code> and typically not of interest). Predictions will come
+with columns for standard errors and variances (squared standard
+errors). The machinery for predictions is modified from
+<code>mixmeta::blup()</code>, where “blup” means “best linear unbiased
+predictor”, a standard term in linear mixed effects modeling. Hence the
+column of predictions returned by <code>predict</code> is labeled
+“<code>blup</code>”. The blups come from the conditional distribution of
+random effects, given the data and estimated variance parameters.
+Following <code>mixmeta::blup</code>, predictions can be of type
+“outcome”, in which case variance from fixed effects terms is included
+in the prediction variance (and standard errors), or “residual”, in
+which case only variance from random effects is included. The default is
+“outcome”. See <code>help(predict.splinemixmeta)</code> for details. Any
+further fine-grained control (such as including one spline but not
+another), can be done by calling <code>splinemixmeta::blup()</code>
+directly.</p>
+<p>Here are two versions of predictions:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>pred_spline_only <span class="ot">&lt;-</span> <span class="fu">predict</span>(smm, <span class="at">include_smooths =</span> <span class="cn">TRUE</span>, <span class="at">include_REs =</span> <span class="cn">FALSE</span>, <span class="at">include_residuals =</span> <span class="cn">FALSE</span>, <span class="at">type =</span> <span class="st">&quot;outcome&quot;</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>pred_spline_and_groups <span class="ot">&lt;-</span> <span class="fu">predict</span>(smm, <span class="at">include_smooths =</span> <span class="cn">TRUE</span>, <span class="at">include_REs =</span> <span class="cn">TRUE</span>, <span class="at">include_residuals =</span> <span class="cn">FALSE</span>, <span class="at">type =</span> <span class="st">&quot;outcome&quot;</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co"># look at both together</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">cbind</span>(pred_spline_only, pred_spline_and_groups))</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co">#&gt;       blup        se      vcov     blup        se      vcov</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co">#&gt; 1 19.01618 0.3506960 0.1229877 18.74330 0.4357595 0.1898863</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="co">#&gt; 2 12.91852 0.5107873 0.2609037 12.64564 0.5430035 0.2948528</span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="co">#&gt; 3 14.19637 0.4093650 0.1675797 13.92349 0.4706131 0.2214767</span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="co">#&gt; 4 19.25014 0.5170299 0.2673199 18.97727 0.5765052 0.3323583</span></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="co">#&gt; 5 18.31537 0.3538785 0.1252300 18.04249 0.4386054 0.1923747</span></span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="co">#&gt; 6 14.81859 0.3818512 0.1458104 15.43221 0.4673896 0.2184530</span></span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a><span class="co"># look at only fixed effect, which could be done with `predict`</span></span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a><span class="co"># but here we illustrate a direct call to `blup`</span></span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a><span class="fu">blup</span>(smm, <span class="at">level=</span><span class="dv">0</span>, <span class="at">vcov =</span> <span class="cn">TRUE</span>, <span class="at">se =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span> <span class="fu">head</span>()</span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a><span class="co">#&gt;       blup        se       vcov</span></span>
+<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a><span class="co">#&gt; 1 17.52867 0.2001708 0.04006835</span></span>
+<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a><span class="co">#&gt; 2 14.80961 0.1982734 0.03931235</span></span>
+<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a><span class="co">#&gt; 3 14.06172 0.2192172 0.04805620</span></span>
+<span id="cb4-19"><a href="#cb4-19" tabindex="-1"></a><span class="co">#&gt; 4 20.57627 0.3187314 0.10158973</span></span>
+<span id="cb4-20"><a href="#cb4-20" tabindex="-1"></a><span class="co">#&gt; 5 17.33722 0.1958174 0.03834447</span></span>
+<span id="cb4-21"><a href="#cb4-21" tabindex="-1"></a><span class="co">#&gt; 6 13.54724 0.2373041 0.05631323</span></span></code></pre></div>
+</div>
+<div id="figures" class="section level2">
+<h2>Figures</h2>
+<p><code>splinemixmeta</code> provides a basic capability for figures,
+for which the suggested package <code>ggplot2</code> is needed.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">plot</span>(smm, <span class="at">ylab =</span> <span class="st">&quot;y&quot;</span>, <span class="at">title =</span> <span class="st">&quot;Spline meta-regression fit&quot;</span>)</span></code></pre></div>
+<p><img role="img" src="data:image/png;base64,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" /><!-- --></p>
+<p>In this figure, the <code>y</code> values are shown with approximate
+95% confidence intervals calculated as +/- 2 standard errors, from the
+standard errors that were input as the <code>se</code> argument to
+<code>splinemixmeta</code>. The fitted line by default includes fixed
+effects and spline terms (blups), with a 95% confidence envelope.</p>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
