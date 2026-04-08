@@ -1,6 +1,6 @@
-2beb402644e0b48d84b73837ac6d7b0e *DESCRIPTION
+33ef8dba34d15f83827d13c276890fd2 *DESCRIPTION
 205b4833a1e99e65cea1d3f511b9bf4b *NAMESPACE
-95f315c08ac54326b1151414064fe826 *NEWS.md
+a32113ed280aded55fc240d5252ba3e9 *NEWS.md
 afc53d3151f14521d07f5be0d202440e *R/blup_smm.R
 28b8f68dc7c2cd4809785c3e4681cd85 *R/globalVariables.R
 0a8e5b583736e7a4e22300b15afb4ff2 *R/make_smm_smooth.R
@@ -9,7 +9,7 @@ e615b5ea8f3394f3385189db21285497 *R/plot_smm.R
 82b7fba7e799ff75516c677f6b0c77bf *R/predict_smm.R
 aa79072fc8db82b6f2366f1d81b44902 *R/splinemixmeta.R
 897d824d717d9e3accd4c32d305746c4 *R/zzz.R
-05f02f38c32ede75345e1d953602accf *README.md
+7d75c37eb0cdad8dab2d7a339222bfb0 *README.md
 6762b6c49a63ff918a557611cee78cff *build/vignette.rds
 375025a23b258661b8bc6eae35aba523 *inst/doc/splinemixmeta.R
 4cf2313cb8ab36b4ec85072950cc3643 *inst/doc/splinemixmeta.Rmd
@@ -23,6 +23,6 @@ cb382457de2849d5c71f69059f999693 *man/predict.splinemixmeta.Rd
 7e73dbd01e1960fd86707adb8dc68b94 *tests/testthat.R
 591324fbb4a15320d38cd7f59b7a851d *tests/testthat/fixtures/SFB30AO.csv
 8fcd1dba55c341af626d88377e9c7892 *tests/testthat/helper-data_sims.R
-a2181a46e3c666063cd36ff464cc49c8 *tests/testthat/test-make_smm_smooth.R
-319ab661972cd3a3fcc12fe8de34252a *tests/testthat/test-splinemixmeta.R
+b3d6235de9878428cf34ff3a3b85af34 *tests/testthat/test-make_smm_smooth.R
+92a33c6ed5a5c0197a647688cbfe7c17 *tests/testthat/test-splinemixmeta.R
 4cf2313cb8ab36b4ec85072950cc3643 *vignettes/splinemixmeta.Rmd
